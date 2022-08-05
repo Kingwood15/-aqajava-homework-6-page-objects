@@ -27,25 +27,15 @@ public class DashboardPage {
         heading.shouldBe(Condition.visible);
     }
 
-    /*public int getFirstCardBalance() {
-        val text = cards.first().text();
-        return extractBalance(text);
-    }
-
-    public DashboardPage getFirstAccountBalance() {
-        System.out.println("Баланс первой карты: " + getFirstCardBalance());
-        return new DashboardPage();
-    }*/
-
     public int getCardBalance(String cardId) {
         // TODO: перебрать все карты и найти по атрибуту data-test-id
         String text = "0";
         for (SelenideElement card : cards) {
-            String textSearch = card.attr("data-test-id"); // получаем id карты
+            String textSearch = card.attr("data-test-id");
             if (textSearch.equals(cardId)) {
                 System.out.println("Карта найдена");
                 text = card.text();
-                //break;
+                break;
             }
         }
         return extractBalance(text);
@@ -58,29 +48,22 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    public DashboardPage getIdAccountBalance(DataHelper.Card card) {//добавить вместо id номер карты или последние четыре цифры
-        int balance = getCardBalance(card.getId());
-        System.out.println("На счету " + card.getCardNumber() + " денег " + balance);
-        return new DashboardPage();
+    public int getIdAccountBalance(DataHelper.Card card) {
+        return getCardBalance(card.getId());
     }
 
-    public DashboardPage transferMoney(DataHelper.Card cardTo, String cardFrom, String sum) {
+    public DashboardPage transferMoney(DataHelper.Card cardTo, String cardFrom, int sum) {
         for (SelenideElement card : cards) {
-            String text = card.attr("data-test-id"); // получаем id карты
+            String text = card.attr("data-test-id");
             if (text.equals(cardTo.getId())) {
                 System.out.println("Счёт " + cardTo.getCardNumber() + " найден");
                 card.$("button.button").click();
-                transferAmount.setValue(sum);
+                transferAmount.setValue(String.valueOf(sum));
                 transferFrom.setValue(cardFrom);
                 transferButton.click();
                 break;
             }
         }
         return new DashboardPage();
-    }
-
-    public void lookAllBalance(DataHelper.AuthInfo authInfo) {
-        System.out.println("1: " + getCardBalance(DataHelper.getFirstCardInfo(authInfo).getId()) +
-                "; \n2: " + getCardBalance(DataHelper.getSecondCardInfo(authInfo).getId()) + ";");
     }
 }
