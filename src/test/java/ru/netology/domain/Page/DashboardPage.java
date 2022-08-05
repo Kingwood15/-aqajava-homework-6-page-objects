@@ -34,7 +34,6 @@ public class DashboardPage {
         for (SelenideElement card : cards) {
             String textSearch = card.attr("data-test-id");
             if (textSearch.equals(cardId)) {
-                System.out.println("Карта найдена");
                 text = card.text();
                 break;
             }
@@ -57,7 +56,6 @@ public class DashboardPage {
         for (SelenideElement card : cards) {
             String text = card.attr("data-test-id");
             if (text.equals(cardTo.getId())) {
-                System.out.println("Счёт " + cardTo.getCardNumber() + " найден");
                 card.$("button.button").click();
                 transferAmount.sendKeys(Keys.LEFT_CONTROL + "A");
                 transferAmount.sendKeys(Keys.BACK_SPACE);
