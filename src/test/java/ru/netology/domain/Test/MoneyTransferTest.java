@@ -1,5 +1,7 @@
 package ru.netology.domain.Test;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,9 +10,12 @@ import ru.netology.domain.Data.DataHelper;
 import ru.netology.domain.Page.DashboardPage;
 import ru.netology.domain.Page.LoginPage;
 
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class MoneyTransferTest {
+    SelenideElement errorMassage = $("[data-test-id='error-notification'] .notification__content");
 
     @BeforeEach
     void shouldStart() {
@@ -19,7 +24,6 @@ public class MoneyTransferTest {
 
     @AfterEach
     void shouldBalanceOut() {
-        var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         DashboardPage dashboardPage = new DashboardPage();
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
@@ -44,6 +48,7 @@ public class MoneyTransferTest {
                     difference);
         }
     }
+
     @Test
     void shouldTransferMoneyToFirstCardFromSecondCardTest() {
         var loginPage = new LoginPage();
@@ -51,6 +56,7 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
+
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
         dashboardPage.transferMoney(
@@ -59,6 +65,7 @@ public class MoneyTransferTest {
                 100);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+
         Assertions.assertEquals(beforeBalanceFirstCard + 100, afterBalanceFirstCard);
         Assertions.assertEquals(beforeBalanceSecondCard - 100, afterBalanceSecondCard);
     }
@@ -70,6 +77,7 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
+
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
         dashboardPage.transferMoney(
@@ -78,6 +86,7 @@ public class MoneyTransferTest {
                 100);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+
         Assertions.assertEquals(beforeBalanceFirstCard - 100, afterBalanceFirstCard);
         Assertions.assertEquals(beforeBalanceSecondCard + 100, afterBalanceSecondCard);
     }
@@ -89,6 +98,7 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
+
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
         dashboardPage.transferMoney(
@@ -97,6 +107,7 @@ public class MoneyTransferTest {
                 0);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+
         Assertions.assertEquals(beforeBalanceFirstCard, afterBalanceFirstCard);
         Assertions.assertEquals(beforeBalanceSecondCard, afterBalanceSecondCard);
     }
@@ -108,6 +119,7 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
+
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
         dashboardPage.transferMoney(
@@ -116,6 +128,7 @@ public class MoneyTransferTest {
                 -100);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+
         Assertions.assertEquals(beforeBalanceFirstCard - 100, afterBalanceFirstCard);
         Assertions.assertEquals(beforeBalanceSecondCard + 100, afterBalanceSecondCard);
     }
@@ -127,16 +140,14 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
-        int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
-        int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+
         dashboardPage.transferMoney(
                 DataHelper.getFirstCardInfo(authInfo),
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
-        int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
-        int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
-        Assertions.assertEquals(beforeBalanceFirstCard, afterBalanceFirstCard);
-        Assertions.assertEquals(beforeBalanceSecondCard, afterBalanceSecondCard);
+
+        errorMassage.shouldHave(exactText("Ошибка!"))
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -146,15 +157,14 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
-        int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
-        int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+
         dashboardPage.transferMoney(
                 DataHelper.getFirstCardInfo(authInfo),
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
-        int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
-        int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
-        Assertions.assertEquals(beforeBalanceFirstCard, afterBalanceFirstCard);
-        Assertions.assertEquals(beforeBalanceSecondCard, afterBalanceSecondCard);
+
+        errorMassage.shouldHave(exactText("Ошибка!"))
+                .shouldBe(Condition.visible);
+        ;
     }
 }
