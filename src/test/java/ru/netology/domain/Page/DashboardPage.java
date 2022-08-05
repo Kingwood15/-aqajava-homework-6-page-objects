@@ -14,13 +14,9 @@ public class DashboardPage {
 
     private SelenideElement heading = $("[data-test-id='dashboard']");
     private ElementsCollection cards = $$(".list__item div");
-    //private ElementsCollection topUpAccounts = $$(".list__item button.button"); //кнопка пополнить
-    //private SelenideElement reloadAccountPage = $("[data-test-id='action-reload']"); //кнопка обновить счета
-    private SelenideElement transferAmount = $("[data-test-id='amount'] input"); //сумма
-    private SelenideElement transferFrom = $("[data-test-id='from'] input"); //откуда
-    //private SelenideElement transferTo = $("[data-test-id='to'] input"); //куда
-    private SelenideElement transferButton = $("[data-test-id='action-transfer'].button"); //пополнить
-    //private SelenideElement transferCancel = $("[data-test-id='action-cancel'].button"); //отмена
+    private SelenideElement transferAmount = $("[data-test-id='amount'] input");
+    private SelenideElement transferFrom = $("[data-test-id='from'] input");
+    private SelenideElement transferButton = $("[data-test-id='action-transfer'].button");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
 

@@ -165,6 +165,5 @@ public class MoneyTransferTest {
 
         errorMassage.shouldHave(exactText("Ошибка!"))
                 .shouldBe(Condition.visible);
-        ;
     }
 }
