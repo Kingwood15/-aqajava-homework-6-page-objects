@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
+import org.openqa.selenium.Keys;
 import ru.netology.domain.Data.DataHelper;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -58,6 +59,8 @@ public class DashboardPage {
             if (text.equals(cardTo.getId())) {
                 System.out.println("Счёт " + cardTo.getCardNumber() + " найден");
                 card.$("button.button").click();
+                transferAmount.sendKeys(Keys.LEFT_CONTROL + "A");
+                transferAmount.sendKeys(Keys.BACK_SPACE);
                 transferAmount.setValue(String.valueOf(sum));
                 transferFrom.setValue(cardFrom);
                 transferButton.click();

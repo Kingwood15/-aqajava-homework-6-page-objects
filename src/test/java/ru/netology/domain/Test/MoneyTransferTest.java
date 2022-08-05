@@ -1,17 +1,51 @@
 package ru.netology.domain.Test;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.Data.DataHelper;
+import ru.netology.domain.Page.DashboardPage;
 import ru.netology.domain.Page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
 public class MoneyTransferTest {
 
+    @BeforeEach
+    void shouldStart() {
+        open("http://localhost:9999/");
+    }
+
+    @AfterEach
+    void shouldBalanceOut() {
+        var loginPage = new LoginPage();
+        var authInfo = DataHelper.getAuthInfo();
+        DashboardPage dashboardPage = new DashboardPage();
+        int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
+        int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
+        int difference;
+        if (beforeBalanceFirstCard == beforeBalanceSecondCard) {
+            return;
+        }
+        if (beforeBalanceFirstCard > beforeBalanceSecondCard) {
+            difference = beforeBalanceFirstCard - beforeBalanceSecondCard;
+            difference = difference / 2;
+            dashboardPage.transferMoney(
+                    DataHelper.getSecondCardInfo(authInfo),
+                    DataHelper.getFirstCardInfo(authInfo).getCardNumber(),
+                    difference);
+        } else {
+            difference = beforeBalanceSecondCard - beforeBalanceFirstCard;
+            difference = difference / 2;
+            dashboardPage.transferMoney(
+                    DataHelper.getFirstCardInfo(authInfo),
+                    DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
+                    difference);
+        }
+    }
     @Test
     void shouldTransferMoneyToFirstCardFromSecondCardTest() {
-        open("http://localhost:9999/");
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -31,7 +65,6 @@ public class MoneyTransferTest {
 
     @Test
     void shouldTransferMoneyToSecondCardFromFirstCardTest() {
-        open("http://localhost:9999/");
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -51,7 +84,6 @@ public class MoneyTransferTest {
 
     @Test
     void shouldTransferMoneyToSecondCardFromFirstCardZeroTest() {
-        open("http://localhost:9999/");
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -71,7 +103,6 @@ public class MoneyTransferTest {
 
     @Test
     void shouldTransferMoneyToSecondCardFromFirstCardNegativeSumTest() {
-        open("http://localhost:9999/");
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -90,8 +121,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldTransferMoneyToSecondCardFromFirstCardHugeSumTest() {
-        open("http://localhost:9999/");
+    void shouldTransferMoneyToFirstCardFromSecondCardHugeSumTest() {
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -100,8 +130,8 @@ public class MoneyTransferTest {
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
         dashboardPage.transferMoney(
-                DataHelper.getSecondCardInfo(authInfo),
-                DataHelper.getFirstCardInfo(authInfo).getCardNumber(),
+                DataHelper.getFirstCardInfo(authInfo),
+                DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int afterBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
@@ -111,7 +141,6 @@ public class MoneyTransferTest {
 
     @Test
     void shouldTransferMoneyToSecondCardFromFirstCardHugeSum2Test() {
-        open("http://localhost:9999/");
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
