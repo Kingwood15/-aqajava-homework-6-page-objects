@@ -15,7 +15,6 @@ public class DashboardPage {
 
     private SelenideElement heading = $("[data-test-id='dashboard']");
     private ElementsCollection cardLine = $$("body .list__item div");
-    private ElementsCollection balance = $$("body .list div[data-test-id]");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
     private final String searchAttribute = "data-test-id";
@@ -33,7 +32,7 @@ public class DashboardPage {
 
     public int getIdAccountBalance(DataHelper.Card selectCard) {
         String text = "0";
-        for(SelenideElement searchCard: balance) {
+        for (SelenideElement searchCard : cardLine) {
             String searchDeleteValue = searchCard.getAttribute(searchAttribute);
             if (searchDeleteValue.equals(selectCard.getId())) {
                 text = searchCard.text();
@@ -43,7 +42,7 @@ public class DashboardPage {
     }
 
     public TransferPage replenishCard(DataHelper.Card cardTo) {
-        for(SelenideElement searchCard: cardLine) {
+        for (SelenideElement searchCard : cardLine) {
             String searchDeleteValue = searchCard.getAttribute(searchAttribute);
             if (searchDeleteValue.equals(cardTo.getId())) {
                 searchCard.$(" [" + searchAttribute + "]").click();
