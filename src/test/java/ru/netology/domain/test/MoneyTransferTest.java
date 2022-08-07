@@ -1,7 +1,5 @@
 package ru.netology.domain.test;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +8,9 @@ import ru.netology.domain.data.DataHelper;
 import ru.netology.domain.page.DashboardPage;
 import ru.netology.domain.page.LoginPage;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class MoneyTransferTest {
-    SelenideElement errorMassage = $("[data-test-id='error-notification'] .notification__content");
 
     @BeforeEach
     void shouldStart() {
@@ -146,8 +141,7 @@ public class MoneyTransferTest {
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
 
-        errorMassage.shouldHave(exactText("Ошибка!"))
-                .shouldBe(Condition.visible);
+        transferPage.transferPageErrorMassage();
     }
 
     @Test
@@ -163,7 +157,6 @@ public class MoneyTransferTest {
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
 
-        errorMassage.shouldHave(exactText("Ошибка!"))
-                .shouldBe(Condition.visible);
+        transferPage.transferPageErrorMassage();
     }
 }

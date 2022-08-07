@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.Keys;
 
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TransferPage {
@@ -15,6 +16,12 @@ public class TransferPage {
 
     public TransferPage() {
         heading.shouldBe(Condition.visible);
+    }
+
+    public TransferPage transferPageErrorMassage() {
+        errorMassage.shouldHave(exactText("Ошибка!"))
+                .shouldBe(Condition.visible);
+        return new TransferPage();
     }
 
     public DashboardPage transferMoney(String cardFrom, int sum) {
