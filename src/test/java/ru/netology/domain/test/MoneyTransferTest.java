@@ -59,7 +59,7 @@ public class MoneyTransferTest {
 
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
-        var transferPage = dashboardPage.replenishCard(DataHelper.getFirstCardInfo(authInfo)); //нажать кнопку "Пополнить" нужной карты
+        var transferPage = dashboardPage.replenishCard(DataHelper.getFirstCardInfo(authInfo));
         transferPage.transferMoney(
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 100);
@@ -70,7 +70,7 @@ public class MoneyTransferTest {
         Assertions.assertEquals(beforeBalanceSecondCard - 100, afterBalanceSecondCard);
     }
 
-    /*@Test
+    @Test
     void shouldTransferMoneyToSecondCardFromFirstCardTest() {
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
@@ -80,8 +80,8 @@ public class MoneyTransferTest {
 
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
-        dashboardPage.transferMoney(
-                DataHelper.getSecondCardInfo(authInfo),
+        var transferPage = dashboardPage.replenishCard(DataHelper.getSecondCardInfo(authInfo));
+        transferPage.transferMoney(
                 DataHelper.getFirstCardInfo(authInfo).getCardNumber(),
                 100);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
@@ -101,8 +101,8 @@ public class MoneyTransferTest {
 
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
-        dashboardPage.transferMoney(
-                DataHelper.getSecondCardInfo(authInfo),
+        var transferPage = dashboardPage.replenishCard(DataHelper.getSecondCardInfo(authInfo));
+        transferPage.transferMoney(
                 DataHelper.getFirstCardInfo(authInfo).getCardNumber(),
                 0);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
@@ -122,8 +122,8 @@ public class MoneyTransferTest {
 
         int beforeBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
         int beforeBalanceSecondCard = dashboardPage.getIdAccountBalance(DataHelper.getSecondCardInfo(authInfo));
-        dashboardPage.transferMoney(
-                DataHelper.getSecondCardInfo(authInfo),
+        var transferPage = dashboardPage.replenishCard(DataHelper.getSecondCardInfo(authInfo));
+        transferPage.transferMoney(
                 DataHelper.getFirstCardInfo(authInfo).getCardNumber(),
                 -100);
         int afterBalanceFirstCard = dashboardPage.getIdAccountBalance(DataHelper.getFirstCardInfo(authInfo));
@@ -140,9 +140,9 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
+        var transferPage = dashboardPage.replenishCard(DataHelper.getFirstCardInfo(authInfo));
 
-        dashboardPage.transferMoney(
-                DataHelper.getFirstCardInfo(authInfo),
+        transferPage.transferMoney(
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
 
@@ -157,13 +157,13 @@ public class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
+        var transferPage = dashboardPage.replenishCard(DataHelper.getSecondCardInfo(authInfo));
 
-        dashboardPage.transferMoney(
-                DataHelper.getFirstCardInfo(authInfo),
+        transferPage.transferMoney(
                 DataHelper.getSecondCardInfo(authInfo).getCardNumber(),
                 15000);
 
         errorMassage.shouldHave(exactText("Ошибка!"))
                 .shouldBe(Condition.visible);
-    }*/
+    }
 }
