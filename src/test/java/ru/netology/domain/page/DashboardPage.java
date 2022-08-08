@@ -4,10 +4,8 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
-import org.openqa.selenium.Keys;
 import ru.netology.domain.data.DataHelper;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -33,8 +31,7 @@ public class DashboardPage {
     public int getIdAccountBalance(DataHelper.Card selectCard) {
         String text = "0";
         for (SelenideElement searchCard : cardLine) {
-            String searchDeleteValue = searchCard.getAttribute(searchAttribute);
-            if (searchDeleteValue.equals(selectCard.getId())) {
+            if (searchCard.getAttribute(searchAttribute).equals(selectCard.getId())) {
                 text = searchCard.text();
             }
         }
@@ -43,8 +40,7 @@ public class DashboardPage {
 
     public TransferPage replenishCard(DataHelper.Card cardTo) {
         for (SelenideElement searchCard : cardLine) {
-            String searchDeleteValue = searchCard.getAttribute(searchAttribute);
-            if (searchDeleteValue.equals(cardTo.getId())) {
+            if (searchCard.getAttribute(searchAttribute).equals(cardTo.getId())) {
                 searchCard.$(" [" + searchAttribute + "]").click();
                 break;
             }
