@@ -18,10 +18,9 @@ public class TransferPage {
         heading.shouldBe(Condition.visible);
     }
 
-    public TransferPage transferPageErrorMassage() {
+    public void transferPageErrorMassage() {
         errorMassage.shouldHave(exactText("Ошибка!"))
                 .shouldBe(Condition.visible);
-        return new TransferPage();
     }
 
     public DashboardPage transferMoney(String cardFrom, int sum) {
