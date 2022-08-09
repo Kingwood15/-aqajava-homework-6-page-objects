@@ -16,6 +16,7 @@ public class DashboardPage {
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
     private final String searchAttribute = "data-test-id";
+    private final String searchButton = "[data-test-id='action-deposit']";
 
     public DashboardPage() { //контруктор проверки, что личный кабинет виден
         heading.shouldBe(Condition.visible);
@@ -28,7 +29,8 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    /*public int getIdAccountBalance(DataHelper.Card selectCard) {
+    /*
+    public int getIdAccountBalance(DataHelper.Card selectCard) {
         String text = "0";
         for (SelenideElement searchCard : cardLine) {
             if (searchCard.getAttribute(searchAttribute).equals(selectCard.getId())) {
@@ -36,7 +38,7 @@ public class DashboardPage {
             }
         }
         return extractBalance(text);
-    }*/
+    }
 
     public TransferPage replenishCard(DataHelper.Card cardTo) {
         for (SelenideElement searchCard : cardLine) {
@@ -47,9 +49,15 @@ public class DashboardPage {
         }
         return new TransferPage();
     }
+    */
 
     public int getIdAccountBalance(DataHelper.Card selectCard) {
         String text = cardLine.find(Condition.attribute(searchAttribute, selectCard.getId())).getText();
         return extractBalance(text);
+    }
+
+    public TransferPage replenishCard(DataHelper.Card selectTo) {
+        cardLine.findBy(Condition.attribute(searchAttribute, selectTo.getId())).find(searchButton).click();
+        return new TransferPage();
     }
 }
